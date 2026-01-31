@@ -1,2 +1,2 @@
 # sr-data
-sr-markdown
+SR-markdown data repository
