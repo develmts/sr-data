@@ -21,7 +21,6 @@ detailedBio: Starting as a cadet and rising to Chief Engineer, Manuel went on to
     engine room and the sterility of the lab. His innovative use of
     drone-based internal inspections has revolutionized how we document
     confined space incidents.
-image: https://picsum.photos/id/433/600/800
 photo: "/assets/people/b97dac0b7be3fe54.png"
 specialties:
     - Collision Reconstruction
