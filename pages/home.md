@@ -30,14 +30,14 @@ carousel:
   items:
     - title: "UNCOMPROMISING TRUTH"
       subtitle: "We don't just read the report. We rewrite the understanding of the incident."
-      image: "hero/u-truth.png"
+      image: "assets/hero/u-truth.png"
       imageAlt: ""
     - title: "FORENSIC PRECISION"
       subtitle: "Where others see chaos, we see a sequence of events waiting to be decoded."
-      image: "hero/f-prec.png"
+      image: "assets/hero/f-prec.png"
       imageAlt: ""
     - title: "MARINE AUTHORITY"
       subtitle: "Decades of ocean-going experience applied to modern legal challenges."
-      image: "hero/m-auth.png"
+      image: "assets/hero/m-auth.png"
       imageAlt: ""
 ---
