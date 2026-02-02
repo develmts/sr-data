@@ -1,0 +1,126 @@
+name: Generate people index
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "people/**"
+      - ".github/workflows/gen-people-index.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate people/index.md (ordered by frontmatter.order)
+        run: |
+          node - <<'NODE'
+          const fs = require("fs");
+          const path = require("path");
+
+          const ROOT = process.cwd();
+          const PEOPLE_DIR = path.join(ROOT, "people");
+          const INDEX_PATH = path.join(ROOT, "people", "index.md");
+
+          // super-simple YAML frontmatter reader (no deps)
+          function readFrontmatter(md) {
+            // expects:
+            // ---
+            // key: value
+            // ---
+            if (!md.startsWith("---")) return {};
+            const end = md.indexOf("\n---", 3);
+            if (end === -1) return {};
+            const fm = md.slice(3, end).trim();
+
+            // parse only "key: value" lines (good enough for order + displayName)
+            const out = {};
+            for (const line of fm.split(/\r?\n/)) {
+              const s = line.trim();
+              if (!s || s.startsWith("#")) continue;
+              const i = s.indexOf(":");
+              if (i === -1) continue;
+              const k = s.slice(0, i).trim();
+              let v = s.slice(i + 1).trim();
+
+              // strip quotes
+              if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                v = v.slice(1, -1);
+              }
+
+              out[k] = v;
+            }
+            return out;
+          }
+
+          function listPersonEntries() {
+            if (!fs.existsSync(PEOPLE_DIR)) return [];
+            const names = fs.readdirSync(PEOPLE_DIR, { withFileTypes: true })
+              .filter(d => d.isFile())
+              .map(d => d.name)
+              .filter(n => n.endsWith(".md") && n !== "index.md");
+
+            const entries = [];
+            for (const name of names) {
+              const rel = `people/${name}`;
+              const abs = path.join(PEOPLE_DIR, name);
+              const raw = fs.readFileSync(abs, "utf8");
+              const fm = readFrontmatter(raw);
+
+              const orderRaw = fm.order;
+              const order = orderRaw !== undefined && orderRaw !== "" ? Number(orderRaw) : NaN;
+              const displayName = (fm.displayName || "").toString();
+
+              // if order missing/invalid -> push to end
+              const ord = Number.isFinite(order) ? order : 999999;
+
+              entries.push({ rel, ord, displayName });
+            }
+
+            // sort by ord asc, then displayName asc, then rel asc
+            entries.sort((a, b) => {
+              if (a.ord !== b.ord) return a.ord - b.ord;
+              const dn = a.displayName.localeCompare(b.displayName);
+              if (dn !== 0) return dn;
+              return a.rel.localeCompare(b.rel);
+            });
+
+            return entries;
+          }
+
+          const entries = listPersonEntries();
+          const files = entries.map(e => e.rel);
+
+          const out = [
+            "---",
+            "generated: true",
+            `generatedAt: "${new Date().toISOString()}"`,
+            "files:",
+            ...files.map(f => `  - ${f}`),
+            "---",
+            "",
+          ].join("\n");
+
+          fs.mkdirSync(path.dirname(INDEX_PATH), { recursive: true });
+          fs.writeFileSync(INDEX_PATH, out, "utf8");
+          console.log(`Wrote people/index.md (${files.length} entries)`);
+          NODE
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add people/index.md
+          git commit -m "chore(data): regen people index"
+          git push
