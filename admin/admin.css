@@ -1,0 +1,58 @@
+/* Level 1 branding only — keep Decap untouched */
+
+html,
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* Top-left brand badge */
+.sr-admin-brand {
+  position: fixed;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  
+  z-index: 999999;
+  pointer-events: none; /* don't block clicks in Decap */
+ 
+  max-width: calc(100vw - 24px);
+  white-space: nowrap;
+}  
+
+.sr-admin-logo {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+.sr-admin-title {
+  display: flex;
+  align-items: baseline;
+  gap : 8px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sr-admin-kicker {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.sr-admin-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
