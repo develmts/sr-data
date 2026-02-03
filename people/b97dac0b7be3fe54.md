@@ -5,11 +5,10 @@ honorific: PhD
 email: mlopez@sororomo.com
 locations: 
     - "Barcelona"
-email: soro@sororomo.com
 order: 1
 
-bio: With 30 years at sea and a decade in forensics, PhD. Manuel López.
-    deciphers the chaotic movements of vessels with surgical precision.
+bio: With 30 years at sea and a decade in forensics, PhD. Manuel López deciphers 
+    the chaotic movements of vessels with surgical precision.
 experience:
     - PhD in Marine Metallurgy
     - Chief Engineer (Steam & Motor)
