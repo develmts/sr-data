@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Content Editor</title>
+
+    <!-- IMPORTANT: Identity widget must exist on the page the email link lands on -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Optional: instant redirect to admin UI -->
+    <meta http-equiv="refresh" content="0; url=/admin/" />
+  </head>
+  <body>
+    Redirecting to editor…
+    <script>
+      // If the invite/confirm link lands here with a token in URL,
+      // the Identity widget needs to initialize on this page.
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.init();
+      }
+    </script>
+  </body>
+</html>
