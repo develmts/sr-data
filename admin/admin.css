@@ -1,9 +1,21 @@
-/* Level 1 branding only — keep Decap untouched */
+/*
+  admin.css
+  -----------
+  Purpose:
+  - Site-level admin mode badge
+  - Visual tweaks outside Sveltia CMS
+  - NOT a Sveltia customization layer
 
+  WARNING:
+  - Do not style Sveltia internals here.
+*/
+
+/* 
 html,
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-}
+} 
+*/
 
 /* Top-left brand badge */
 .sr-admin-brand {

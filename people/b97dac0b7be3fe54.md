@@ -13,7 +13,7 @@ experience:
     - PhD in Marine Metallurgy
     - Chief Engineer (Steam & Motor)
     - "Patent Holder: Sub-surface hull scanning array"
-    - "Lead Technical Analyst: North Sea Rig Fire"
+    - "Lead Technical Analyst: North Sea Rig Fire."
 name: PhD Manuel Lopez
 role: Chief Engineer & Failure Analyst
 detailedBio: Starting as a cadet and rising to Chief Engineer, Manuel went on to

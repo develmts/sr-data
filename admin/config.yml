@@ -3,8 +3,8 @@ backend:
   repo: develmts/sr-data
   branch: main
 
-# This project does NOT manage images via Decap.
-# Images live in the main site repo under /assets.
+# This project does NOT manage images via CMS.
+# Images are served by the main site (remote CDN / app path).
 media_folder: "NO_MEDIA"
 public_folder: "/NO_MEDIA"
 
@@ -24,12 +24,13 @@ collections:
     summary: "{{displayName}} — {{role}}"
 
     fields:
-      # Canonical immutable ID
+      # Keep id aligned with filename/slug to prevent inconsistencies.
       - {
           name: "id",
           label: "ID (immutable)",
           widget: "string",
-          hint: "Hex16 identifier. Do NOT change once created."
+          hint: "Auto-filled with the filename UUID. Do NOT change once created.",
+          default: "{{slug}}"
         }
 
       - { name: "displayName", label: "Display name", widget: "string" }
@@ -44,19 +45,14 @@ collections:
 
       - { name: "role", label: "Role", widget: "string", required: false }
 
-      - {
-          name: "email",
-          label: "Email",
-          widget: "string",
-          required: false
-        }
+      - { name: "email", label: "Email", widget: "string", required: false }
 
       - {
           name: "photo",
           label: "Photo path",
           widget: "string",
           required: false,
-          hint: "Path under /assets (e.g. /assets/people/xxxx.png)"
+          hint: "Public path used by the app (e.g. /people/<id>.jpg)."
         }
 
       - {
@@ -72,29 +68,21 @@ collections:
         label: "Locations"
         widget: "list"
         required: false
-        field:
-          { name: "location", label: "Location", widget: "string" }
+        field: { name: "location", label: "Location", widget: "string" }
 
       - name: "specialties"
         label: "Specialties"
         widget: "list"
         required: false
-        field:
-          { name: "specialty", label: "Specialty", widget: "string" }
+        field: { name: "specialty", label: "Specialty", widget: "string" }
 
       - name: "experience"
         label: "Experience"
         widget: "list"
         required: false
-        field:
-          { name: "item", label: "Item", widget: "string" }
+        field: { name: "item", label: "Item", widget: "string" }
 
-      - {
-          name: "bio",
-          label: "Short bio",
-          widget: "text",
-          required: false
-        }
+      - { name: "bio", label: "Short bio", widget: "text", required: false }
 
       - {
           name: "detailedBio",
@@ -122,24 +110,9 @@ collections:
         name: "home"
         fields:
           - { name: "title", label: "Title", widget: "string" }
-          - {
-              name: "seoTitle",
-              label: "SEO title",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "seoDescription",
-              label: "SEO description",
-              widget: "text",
-              required: false
-            }
-          - {
-              name: "body",
-              label: "Body",
-              widget: "markdown",
-              required: false
-            }
+          - { name: "seoTitle", label: "SEO title", widget: "string", required: false }
+          - { name: "seoDescription", label: "SEO description", widget: "text", required: false }
+          - { name: "body", label: "Body", widget: "markdown", required: false }
 
       - file: "pages/contact.md"
         label: "Contact"
@@ -147,95 +120,24 @@ collections:
         fields:
           - { name: "title", label: "Title", widget: "string" }
           - { name: "intro", label: "Intro", widget: "text", required: false }
-          - {
-              name: "formTitle",
-              label: "Form title",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "identityLabel",
-              label: "Identity label",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "identityPlaceholder",
-              label: "Identity placeholder",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "emailLabel",
-              label: "Email label",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "emailPlaceholder",
-              label: "Email placeholder",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "subjectLabel",
-              label: "Subject label",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "subjectPlaceholder",
-              label: "Subject placeholder",
-              widget: "string",
-              required: false
-            }
+          - { name: "formTitle", label: "Form title", widget: "string", required: false }
+          - { name: "identityLabel", label: "Identity label", widget: "string", required: false }
+          - { name: "identityPlaceholder", label: "Identity placeholder", widget: "string", required: false }
+          - { name: "emailLabel", label: "Email label", widget: "string", required: false }
+          - { name: "emailPlaceholder", label: "Email placeholder", widget: "string", required: false }
+          - { name: "subjectLabel", label: "Subject label", widget: "string", required: false }
+          - { name: "subjectPlaceholder", label: "Subject placeholder", widget: "string", required: false }
           - name: "subjects"
             label: "Subjects"
             widget: "list"
             required: false
-            field:
-              { name: "subject", label: "Subject", widget: "string" }
-          - {
-              name: "messageLabel",
-              label: "Message label",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "messagePlaceholder",
-              label: "Message placeholder",
-              widget: "text",
-              required: false
-            }
-          - {
-              name: "submitLabel",
-              label: "Submit label",
-              widget: "string",
-              required: false
-            }
-          - {
-              name: "gdprNote",
-              label: "GDPR note",
-              widget: "text",
-              required: false
-            }
-          - {
-              name: "body",
-              label: "Body",
-              widget: "markdown",
-              required: false
-            }
+            field: { name: "subject", label: "Subject", widget: "string" }
+          - { name: "messageLabel", label: "Message label", widget: "string", required: false }
+          - { name: "messagePlaceholder", label: "Message placeholder", widget: "text", required: false }
+          - { name: "submitLabel", label: "Submit label", widget: "string", required: false }
+          - { name: "gdprNote", label: "GDPR note", widget: "text", required: false }
+          - { name: "body", label: "Body", widget: "markdown", required: false }
 
-      - file: "pages/privacy.md"
-        label: "Privacy"
-        name: "privacy"
-        fields:
-          - { name: "title", label: "Title", widget: "string" }
-          - { name: "body", label: "Body", widget: "markdown" }
+      # IMPORTANT: privacy/legal are intentionally NOT exposed in CMS.
+      # The app may still load them from the repo on-the-fly.
 
-      - file: "pages/legal.md"
-        label: "Legal"
-        name: "legal"
-        fields:
-          - { name: "title", label: "Title", widget: "string" }
-          - { name: "body", label: "Body", widget: "markdown" }
