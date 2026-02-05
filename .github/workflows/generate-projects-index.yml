@@ -1,0 +1,46 @@
+name: Generate projects index.md
+
+on:
+  push:
+    paths:
+      - "projects/**"
+  workflow_dispatch:
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate projects/index.md
+        run: |
+          set -e
+
+          DIR="projects"
+          INDEX="$DIR/index.md"
+
+          echo "---" > "$INDEX"
+          echo "files:" >> "$INDEX"
+
+          for f in $(ls "$DIR"/*.md | grep -v "/index.md$" | sort); do
+            name=$(basename "$f")
+            echo "  - $name" >> "$INDEX"
+          done
+
+          echo "---" >> "$INDEX"
+
+      # IMPORTANT: add untracked files before diff
+      - name: Stage index.md
+        run: |
+          git add projects/index.md
+
+      - name: Commit if changed
+        run: |
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git commit -m "chore(projects): regenerate index.md"
+            git push
+          fi

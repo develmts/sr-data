@@ -98,6 +98,38 @@ collections:
           widget: "string",
           required: false
         }
+  # =========================
+  # PRojects
+  # =========================        
+  - name: "projects"
+    label: "Projects"
+    label_singular: "Project"
+    folder: "projects"
+    create: true
+    delete: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{id}}"
+    summary: "{{title}} — {{year}}"
+    sortable_fields: ["order", "year", "title", "featured"]
+
+    fields:
+      - { name: "id", label: "ID", widget: "uuid" }
+      - { name: "title", label: "Title", widget: "string" }
+
+      - { name: "featured", label: "Featured (show in portfolio)", widget: "boolean", default: true }
+      - { name: "anonymized", label: "Anonymized", widget: "boolean", default: false }
+
+      - { name: "summary", label: "Summary", widget: "text", required: true }
+      - { name: "role", label: "Role", widget: "string", required: false }
+
+      - { name: "services", label: "Services", widget: "list", required: false, allow_add: true }
+      - { name: "categories", label: "Categories", widget: "list", required: false, allow_add: true }
+
+      - { name: "year", label: "Year", widget: "number", required: false, value_type: "int", min: 1900, max: 2100 }
+      - { name: "order", label: "Order", widget: "number", required: false, value_type: "int", min: 0, default: 9999 }
+
+      - { name: "body", label: "Case study", widget: "markdown" }
 
   # =========================
   # PAGES (singletons)
